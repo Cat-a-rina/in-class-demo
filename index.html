@@ -1,4 +1,60 @@
-<body>
+<body style="background: white"></body>
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+<script src="https://unpkg.com/tone"></script>
+<script src="https://algorithmicmusic.online/js/viz-helpers.js"></script>
+<script>
+/* global Tone, nn, viz */
+//sources
+// ---------------------
+const filePath = 'https://tonejs.github.io/audio/drum-samples/Kit8/snare.mp3'
+const player = new Tone.Player(filePath).toDestination()
   
+//musical settings
+//----------------------
+Tone.Transport.bpm.value = 120
+  
+//functions
+//---------------------
+function toggle() {
+  if (Tone.Transport.state === 'stopped') {
+    Tone.Transport.start()
+    //if stoped, want to put start 
+    //this.content('stop')
+  } else {
+  Tone.Transport.stop()
+    //we started so we want
+    //this.content('start')
+  }
+}
+  
+function updateBPM () {
+  Tone.Transport.bpm.value = this.value
+}
+function play(time) { //pass time to play at time of beat
+  const beat = step % 4
+  
+  if (beat === 0) drumset.player('kick').start(time)
+  if (beat === 2) drumset.player('snare').strat(time)
+  drumset.player('hihat').start(time)
+  
+  const chance = nn.random()
+  if (chance < 0.25){ //25 percent chance we get snare, less prob.
+    drumset.player('snare').start(time)
+  }
+  step++
+}
+  
+new Tone.Loop(play).start() //play will run over and over on every beat
+//can save loop into a var and can call start on that var later
+  
+//UI
+//-----------------------------
+  
+nn.create('button')
+  .content
+nn.create('input')
+  .set('type', 'checkbox')
+  .addTo('body')
+  .on('change', toggle)
 
-</body>
+</script>
